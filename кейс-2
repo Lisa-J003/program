@@ -1,0 +1,21 @@
+#include <iostream>
+
+class Parent {
+public:
+    Parent(int x) {
+        std::cout << "Parent constructor called with integer argument: " << x << std::endl;
+    }
+};
+
+class Child : public Parent {
+public:
+    Child() {
+        super(10); // Call parent constructor with argument 10
+        std::cout << "Child constructor called" << std::endl;
+    }
+};
+
+int main() {
+    Child objChild; // Create an instance of Child
+    return 0;
+}
