@@ -1,0 +1,29 @@
+otr, pr = 0, 1
+
+n = int(input('n = '))
+
+print('Введите числа массива: ')
+
+arr = [int(input()) for i in range(n)]
+
+print(arr)
+
+for i in arr:
+
+   if i < 0:  otr += i
+
+   if arr.index(max(arr)) > arr.index(min(arr)):
+
+       if arr.index(i) > arr.index(min(arr)) and arr.index(i) < arr.index(max(arr)):  
+
+           pr *= i
+
+   elif arr.index(max(arr)) < arr.index(min(arr)):
+
+       if arr.index(i) < arr.index(min(arr)) and arr.index(i) > arr.index(max(arr)):  
+
+           pr *= i
+
+print('Сумма отрицательных чисел:', otr)
+
+print('Произведение элементов между минимальным и максимальным числами:', pr)
