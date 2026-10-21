@@ -9,9 +9,8 @@ public:
 
 class Child : public Parent {
 public:
-    Child() {
-        super(10); // Call parent constructor with argument 10
-        std::cout << "Child constructor called" << std::endl;
+    Child() : Parent(10) {
+            std::cout << "Child constructor called" << std::endl;
     }
 };
 
