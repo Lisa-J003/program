@@ -22,9 +22,9 @@ USE `mydb` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Air` (
   `id` INT NOT NULL,
-  `Prise id` VARCHAR(45) NULL,
+  `Price id` VARCHAR(45) NULL,
   `Airlines` VARCHAR(45) NULL,
-  `Prise` VARCHAR(45) NULL,
+  `Price` DECIMAL(10,2) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -34,9 +34,9 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`hotels` (
   `id` INT NOT NULL,
-  `Prise id` VARCHAR(45) NULL,
-  `Name` INT NULL,
-  `Prise` VARCHAR(45) NULL,
+  `Price id` VARCHAR(45) NULL,
+  `Name` VARCHAR(45) NULL,
+  `Price` DECIMAL(10,2) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -46,8 +46,9 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Exchange Rates` (
   `id` INT NOT NULL,
-  `Prise id` VARCHAR(45) NULL,
+  `Price id` VARCHAR(45) NULL,
   `Currency` VARCHAR(45) NULL,
+  `Rate` DECIMAL(12,4) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
@@ -57,45 +58,45 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Food` (
   `id` INT NOT NULL,
-  `Prise id` VARCHAR(45) NULL,
+  `Price` VARCHAR(45) NULL,
   `Name` VARCHAR(45) NULL,
-  `Prise` VARCHAR(45) NULL,
+  `Price` DECIMAL(10,2) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Prise`
+-- Table `mydb`.`Price`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Prise` (
+CREATE TABLE IF NOT EXISTS `mydb`.`Price` (
   `id` INT NOT NULL,
-  `Name` INT NULL,
-  `Price` VARCHAR(45) NULL,
+  `Name` VARCHAR(45) NULL,
+  `Price` DECIMAL(10,2) NULL,
   `Air_id` INT NOT NULL,
   `hotels_id` INT NOT NULL,
   `Exchange Rates_id` INT NOT NULL,
   `Food_id` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_Prise_Air_idx` (`Air_id` ASC) VISIBLE,
-  INDEX `fk_Prise_hotels1_idx` (`hotels_id` ASC) VISIBLE,
-  INDEX `fk_Prise_Exchange Rates1_idx` (`Exchange Rates_id` ASC) VISIBLE,
-  INDEX `fk_Prise_Food1_idx` (`Food_id` ASC) VISIBLE,
-  CONSTRAINT `fk_Prise_Air`
+  INDEX `fk_Price_Air_idx` (`Air_id` ASC) VISIBLE,
+  INDEX `fk_Price_hotels1_idx` (`hotels_id` ASC) VISIBLE,
+  INDEX `fk_Price_Exchange Rates1_idx` (`Exchange Rates_id` ASC) VISIBLE,
+  INDEX `fk_Price_Food1_idx` (`Food_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Price_Air`
     FOREIGN KEY (`Air_id`)
     REFERENCES `mydb`.`Air` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Prise_hotels1`
+  CONSTRAINT `fk_Price_hotels1`
     FOREIGN KEY (`hotels_id`)
     REFERENCES `mydb`.`hotels` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Prise_Exchange Rates1`
+  CONSTRAINT `fk_Price_Exchange Rates1`
     FOREIGN KEY (`Exchange Rates_id`)
     REFERENCES `mydb`.`Exchange Rates` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Prise_Food1`
+  CONSTRAINT `fk_Price_Food1`
     FOREIGN KEY (`Food_id`)
     REFERENCES `mydb`.`Food` (`id`)
     ON DELETE NO ACTION
@@ -114,7 +115,28 @@ CREATE TABLE IF NOT EXISTS `mydb`.`view1` (`id` INT);
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `mydb`.`view1`;
 USE `mydb`;
-CREATE  OR REPLACE VIEW `Туризм` AS;
+CREATE  OR REPLACE VIEW `Туризм` AS
+SELECT
+  p.`id`             AS price_id,
+  p.`Name`           AS price_name,
+  p.`Price`          AS total_price,
+  a.`Airlines`       AS airline,
+  a.`Price`          AS air_price,
+  h.`Name`           AS hotel_name,
+  h.`Price`          AS hotel_price,
+  e.`Currency`       AS currency,
+  e.`Rate`           AS rate,
+  f.`Name`           AS food_name,
+  f.`Price`          AS food_price
+FROM `Price` p
+JOIN `Air` a              ON a.`id` = p.`Air_id`
+JOIN `hotels` h           ON h.`id` = p.`hotels_id`
+JOIN `Exchange Rates` e   ON e.`id` = p.`Exchange Rates_id`
+JOIN `Food` f             ON f.`id` = p.`Food_id`;
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
